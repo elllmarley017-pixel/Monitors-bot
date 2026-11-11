@@ -3,8 +3,10 @@ const { initDb, closeDb } = require('./database/db');
 const { createBot } = require('./app');
 
 // Validasi konfigurasi utama
-if (!config.BOT_TOKEN || config.BOT_TOKEN.includes('YOUR_BOT_TOKEN')) {
-  console.error('Error: BOT_TOKEN belum dikonfigurasi di file config.js.');
+if (!config.BOT_TOKEN || !config.ENCRYPTION_SECRET) {
+  console.error('Error: kredensial belum diisi.');
+  console.error('Salin config.local.example.js menjadi config.local.js, lalu isi');
+  console.error('BOT_TOKEN, OWNER_ID, dan ENCRYPTION_SECRET. Berkas itu tidak diunggah ke git.');
   process.exit(1);
 }
 

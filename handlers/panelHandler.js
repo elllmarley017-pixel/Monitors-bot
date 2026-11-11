@@ -125,7 +125,7 @@ function registerPanelHandlers(bot, showServerList) {
  * @param {import('telegraf').Context} ctx
  * @param {{step: string, panelUrl?: string}} pendingAction
  * @param {(ctx: object, page: number) => Promise<any>} showServerList
- * @param {{createClient?: Function}} [deps] Titik suntik untuk pengujian
+ * @param {{createClient?: Function, secretHex?: string}} [deps] Titik suntik untuk pengujian
  * @returns {Promise<boolean>} true bila pesan sudah ditangani
  */
 async function processPanelTextInput(ctx, pendingAction, showServerList, deps = {}) {
@@ -182,10 +182,11 @@ async function processPanelTextInput(ctx, pendingAction, showServerList, deps = 
 
     try {
       const buatClient = deps.createClient || createClient;
+      const kunciEnkripsi = deps.secretHex || config.ENCRYPTION_SECRET;
       const client = buatClient(panelUrl, apiKey);
       const account = await client.getAccount();
 
-      const panel = panelStore.addPanel(userId, { panelUrl, apiKey }, config.ENCRYPTION_SECRET);
+      const panel = panelStore.addPanel(userId, { panelUrl, apiKey }, kunciEnkripsi);
 
       stateStore.updateState(userId, {
         activePanelId: panel.id,

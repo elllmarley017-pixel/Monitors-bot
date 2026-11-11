@@ -2,6 +2,8 @@ const assert = require('node:assert');
 const path = require('node:path');
 const fs = require('node:fs');
 
+const TEST_SECRET = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
+
 /**
  * Uji perakitan bot tanpa jaringan: update sintetis diproses oleh
  * instance bot yang sama dengan produksi (app.js), lalu seluruh panggilan
@@ -116,7 +118,6 @@ async function runTest() {
   const { createBot } = require('../app');
   const panelStore = require('../database/panelStore');
   const stateStore = require('../database/stateStore');
-  const config = require('../config');
 
   const testDbPath = path.join(__dirname, 'test-routing.db');
   if (fs.existsSync(testDbPath)) fs.unlinkSync(testDbPath);
@@ -201,7 +202,7 @@ async function runTest() {
   const panel = panelStore.addPanel(
     userId,
     { panelUrl: 'https://panel-routing.contoh.com', apiKey: 'ptlc_routing' },
-    config.ENCRYPTION_SECRET
+    TEST_SECRET
   );
   calls.length = 0;
   await bot.handleUpdate(callbackUpdate(userId, 'pnl_list', 52));

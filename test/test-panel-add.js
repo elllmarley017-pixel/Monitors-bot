@@ -4,6 +4,7 @@ const fs = require('node:fs');
 
 const { makeCtx, allHtml } = require('./helpers');
 const DB_PATH = path.join(__dirname, 'test-panel-add.db');
+const TEST_SECRET = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
 
 function fakeClient(account) {
   return () => ({
@@ -72,7 +73,7 @@ async function runTest() {
     ctxReject,
     stateStore.getPendingAction(userId),
     daftarServer,
-    { createClient: failingClient('Unauthorized') }
+    { createClient: failingClient('Unauthorized'), secretHex: TEST_SECRET }
   );
   assert.ok(allHtml(ctxReject).includes('Unauthorized'), 'Pesan panel harus diteruskan');
   assert.strictEqual(panelStore.countPanels(userId), 0);
@@ -84,7 +85,7 @@ async function runTest() {
     ctxOk,
     stateStore.getPendingAction(userId),
     async () => { daftarDipanggil += 1; },
-    { createClient: fakeClient({ username: 'hanztenzu', email: 'a@b.c' }) }
+    { createClient: fakeClient({ username: 'hanztenzu', email: 'a@b.c' }), secretHex: TEST_SECRET }
   );
 
   assert.ok(allHtml(ctxOk).includes('Server Ditambahkan'));
@@ -95,7 +96,7 @@ async function runTest() {
   const panel = panelStore.listPanels(userId)[0];
   assert.strictEqual(stateStore.getState(userId).activePanelId, panel.id, 'Panel baru jadi aktif');
   assert.strictEqual(
-    panelStore.getPanelCredentials(userId, panel.id, require('../config').ENCRYPTION_SECRET).apiKey,
+    panelStore.getPanelCredentials(userId, panel.id, TEST_SECRET).apiKey,
     'ptlc_benar',
     'Kredensial terdekripsi harus sesuai'
   );
@@ -117,7 +118,7 @@ async function runTest() {
     ctxDuaKey,
     stateStore.getPendingAction(userId),
     daftarServer,
-    { createClient: fakeClient({ username: 'kedua', email: 'k@d.c' }) }
+    { createClient: fakeClient({ username: 'kedua', email: 'k@d.c' }), secretHex: TEST_SECRET }
   );
 
   assert.strictEqual(panelStore.countPanels(userId), 2, 'User harus bisa punya dua panel');

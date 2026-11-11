@@ -108,8 +108,9 @@ Berkas terkait:
 
 ```
 bot-monitor/
-├── config.js                 # Konfigurasi bot (tidak di-commit)
-├── config.example.js         # Template konfigurasi
+├── config.js                 # Nilai contoh, aman diunggah
+├── config.local.js           # Kredensial asli (tidak di-commit)
+├── config.local.example.js   # Template untuk config.local.js
 ├── index.js                  # Bootstrap: init DB dan launch
 ├── app.js                    # Perakitan bot, dipakai juga oleh pengujian
 ├── database/
@@ -180,26 +181,35 @@ Dependency: `telegraf`, `axios`, `ws`, `form-data`.
 
 ## Konfigurasi
 
-Salin `config.example.js` menjadi `config.js`, lalu isi:
+Kredensial tidak disimpan di `config.js`, sehingga berkas itu aman untuk diunggah dan dibagikan. Nilai asli diletakkan di `config.local.js` yang diabaikan git.
 
-```javascript
-module.exports = {
-  BOT_TOKEN: 'token_dari_botfather',
-  OWNER_ID: 123456789,
-  ENCRYPTION_SECRET: 'hasil_randomBytes_32_hex',
-  DB_PATH: './database/pterobot.db',
-};
-```
+1. Salin template:
 
-Buat `ENCRYPTION_SECRET` acak:
+   ```bash
+   cp config.local.example.js config.local.js
+   ```
 
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-```
+2. Isi nilainya:
+
+   ```javascript
+   module.exports = {
+     BOT_TOKEN: 'token_dari_botfather',
+     OWNER_ID: 123456789,
+     ENCRYPTION_SECRET: 'hasil_randomBytes_32_hex',
+   };
+   ```
+
+3. Buat `ENCRYPTION_SECRET` acak:
+
+   ```bash
+   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+   ```
+
+`config.js` memuat nilai contoh, lalu menimpanya dengan isi `config.local.js` bila berkas itu ada. Tanpa kredensial, bot menolak berjalan dan menampilkan cara mengisinya, jadi tidak ada nilai bawaan yang bisa dipakai tanpa sengaja.
 
 Tidak ada URL panel di konfigurasi. Panel ditambahkan oleh user lewat menu Tambah Server.
 
-`config.js` dan `database/*.db` sudah dikecualikan di `.gitignore`.
+Diabaikan git: `config.local.js` dan `database/*.db`.
 
 ---
 

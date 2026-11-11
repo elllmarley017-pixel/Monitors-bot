@@ -4,6 +4,7 @@ const fs = require('node:fs');
 
 const { makeCtx, allHtml } = require('./helpers');
 const DB_PATH = path.join(__dirname, 'test-router.db');
+const TEST_SECRET = '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef';
 
 async function runTest() {
   console.log('Menjalankan pengujian routing pesan teks...');
@@ -12,7 +13,6 @@ async function runTest() {
   const panelStore = require('../database/panelStore');
   const stateStore = require('../database/stateStore');
   const { handleTextUpdate } = require('../handlers/textRouter');
-  const config = require('../config');
 
   if (fs.existsSync(DB_PATH)) fs.unlinkSync(DB_PATH);
   initDb(DB_PATH);
@@ -69,7 +69,7 @@ async function runTest() {
   const panel = panelStore.addPanel(
     userId,
     { panelUrl: 'https://panel-aktif.contoh.com', apiKey: 'ptlc_aktif' },
-    config.ENCRYPTION_SECRET
+    TEST_SECRET
   );
   stateStore.updateState(userId, { activePanelId: panel.id });
 
