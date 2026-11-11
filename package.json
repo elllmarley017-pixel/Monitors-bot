@@ -1,0 +1,24 @@
+{
+  "name": "pterodactyl-telegram-bot",
+  "version": "1.6.0",
+  "description": "Telegram bot for managing Pterodactyl Panel servers with rich messages and native buttons",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test/test-panels.js && node test/test-isolation.js && node test/test-unauth-state.js && node test/test-panel-add.js && node test/test-text-router.js && node test/test-ptero-client.js && node test/test-console-ws.js && node test/test-rich.js && node test/test-dashboard.js && node test/test-power-info.js && node test/test-file-manager.js && node test/test-startup.js && node test/test-bot-routing.js"
+  },
+  "keywords": [
+    "pterodactyl",
+    "telegram-bot",
+    "telegraf",
+    "server-manager"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "form-data": "^4.0.1",
+    "telegraf": "^4.16.3",
+    "ws": "^8.18.0"
+  }
+}

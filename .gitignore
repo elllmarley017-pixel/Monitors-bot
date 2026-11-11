@@ -1,0 +1,11 @@
+node_modules/
+config.js
+database/*.db
+database/*.db-journal
+test/*.db
+.superpowers/
+.probe/
+*.log
+.doc-*
+.probe-*
+docs/superpowers/
